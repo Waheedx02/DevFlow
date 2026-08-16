@@ -1,0 +1,1 @@
+export const MAX_SNIPPETS_PER_USER = 3;

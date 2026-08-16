@@ -1,0 +1,37 @@
+# See https://help.github.com/articles/ignoring-files/ for more details.
+
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Next.js build output
+/.next/
+/out/
+
+# Production builds
+/build
+
+# Environment variables (Sensitive secrets)
+.env
+.env*.local
+
+# TypeScript build info cache
+*.tsbuildinfo
+
+# AI Assistant & IDE specific folders (from your structure)
+.windsurf/
+.claude/
+.agents/
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
