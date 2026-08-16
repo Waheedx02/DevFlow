@@ -10,8 +10,16 @@ export function SnippetUsageBadge() {
   const pathname = usePathname();
   const [count, setCount] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false); // Add this
+
+  // Only render after client-side hydration
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
+    if (!mounted) return; // Don't fetch until mounted
+
     (async () => {
       setIsLoading(true);
       try {
@@ -19,13 +27,15 @@ export function SnippetUsageBadge() {
         setCount(c);
       } catch (err) {
         console.error("Failed to fetch snippet count:", err);
+        setCount(0); // Fallback to 0 if fetch fails
       } finally {
         setIsLoading(false);
       }
     })();
-  }, [pathname]); // Refetch whenever route changes
+  }, [pathname, mounted]);
 
-  if (isLoading) {
+  // Don't render until hydrated to avoid build-time errors
+  if (!mounted || isLoading) {
     return (
       <div className="h-6 bg-slate-800 rounded-full animate-pulse" />
     );
