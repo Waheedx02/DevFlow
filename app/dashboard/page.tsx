@@ -1,9 +1,12 @@
 // app/dashboard/page.tsx
+import { Suspense } from "react";
 import Link from "next/link";
 import { Plus, TrendingUp, Sparkles, ArrowRight } from "lucide-react";
 import { SnippetCard } from "@/app/components/SnippetCard";
 import { SnippetsToolbar } from "@/app/components/SnippetsToolbar";
 import { getAllSnippets, getSnippetLanguages, hasAnySnippets } from "@/app/actions/snippet-action";
+
+export const dynamic = "force-dynamic";
 
 export default async function DashboardHome({
   searchParams,
@@ -57,9 +60,11 @@ export default async function DashboardHome({
         </div>
       </section>
 
-      {/* Search & Filters */}
+      {/* Search & Filters - WRAPPED IN SUSPENSE */}
       <section className="space-y-4">
-        <SnippetsToolbar languages={languages} />
+        <Suspense fallback={<div className="h-32 bg-slate-800 rounded-xl animate-pulse" />}>
+          <SnippetsToolbar languages={languages} />
+        </Suspense>
       </section>
 
       {/* Results Section */}

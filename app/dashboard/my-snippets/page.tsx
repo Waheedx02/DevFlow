@@ -1,9 +1,11 @@
-// app/dashboard/my-snippets/page.tsx
+import { Suspense } from "react";
 import Link from "next/link";
 import { Plus, Library, ArrowRight, Settings2 } from "lucide-react";
 import { SnippetCard } from "@/app/components/SnippetCard";
 import { SnippetsToolbar } from "@/app/components/SnippetsToolbar";
 import { getAllSnippets, getSnippetLanguages, hasAnySnippets } from "@/app/actions/snippet-action";
+
+export const dynamic = "force-dynamic";
 
 export default async function MySnippetsPage({
   searchParams,
@@ -65,7 +67,7 @@ export default async function MySnippetsPage({
         </div>
       </section>
 
-      {/* Search & Filters Section */}
+      {/* Search & Filters Section - WRAPPED IN SUSPENSE */}
       {hasAny && (
         <section className="space-y-4">
           <div className="flex items-center gap-2 mb-3">
@@ -76,7 +78,9 @@ export default async function MySnippetsPage({
               </span>
             )}
           </div>
-          <SnippetsToolbar languages={languages} />
+          <Suspense fallback={<div className="h-32 bg-slate-800 rounded-xl animate-pulse" />}>
+            <SnippetsToolbar languages={languages} />
+          </Suspense>
         </section>
       )}
 
