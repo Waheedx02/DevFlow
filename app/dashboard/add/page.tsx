@@ -1,10 +1,15 @@
+// app/dashboard/add/page.tsx
+import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 import { ArrowLeft, Lock } from "lucide-react";
 import { getSnippetCount } from "@/app/actions/snippet-action";
 import { MAX_SNIPPETS_PER_USER } from "@/lib/limits";
 import { AddSnippetForm } from "@/app/components/AddSnippetForm";
 
+export const dynamic = "force-dynamic"; // Add this line
+
 export default async function AddSnippetPage() {
+  noStore(); // Add this to prevent caching
   const count = await getSnippetCount();
 
   if (count >= MAX_SNIPPETS_PER_USER) {
