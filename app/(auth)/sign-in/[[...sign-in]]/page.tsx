@@ -44,21 +44,29 @@ function SignInForm() {
     setError(null);
     setSubmitting("google");
 
-    const { error: ssoError } = await signIn.sso({
-      strategy: "oauth_google",
-      redirectCallbackUrl: "/s/callback",
-      redirectUrl: "/dashboard",
-    });
+    try {
+      const { error } = await signIn.sso({
+        strategy: "oauth_google",
+        redirectCallbackUrl: "/s/callback",
+        redirectUrl: "/dashboard",
+      });
 
-    if (ssoError) {
-      setError(ssoError.message || "Something went wrong with Google Sign In.");
+      if (error) {
+        console.error("Clerk Google OAuth error:", error);
+        setError(
+          error.message || "Something went wrong with Google Sign Up."
+        );
+        setSubmitting(null);
+      }
+    } catch (err) {
+      console.error("Google OAuth exception:", err);
+      setError("Something went wrong with Google Sign Up.");
       setSubmitting(null);
     }
-    // On success, the browser is redirecting away — leave the spinner on.
   };
 
   // Handle Standard Email/Password Sign In
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (submitting) return;
     setError(null);

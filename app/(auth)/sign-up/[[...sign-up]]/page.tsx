@@ -39,20 +39,29 @@ function SignUpForm() {
   // Handle Google OAuth Sign Up
   const handleGoogleSignUp = async () => {
     if (submitting) return;
+
     setError(null);
     setSubmitting("google");
 
-    const { error: ssoError } = await signUp.sso({
-      strategy: "oauth_google",
-      redirectCallbackUrl: "/s/callback",
-      redirectUrl: "/dashboard",
-    });
+    try {
+      const { error } = await signUp.sso({
+        strategy: "oauth_google",
+        redirectCallbackUrl: "/s/callback",
+        redirectUrl: "/dashboard",
+      });
 
-    if (ssoError) {
-      setError(ssoError.message || "Something went wrong with Google Sign Up.");
+      if (error) {
+        console.error("Clerk Google OAuth error:", error);
+        setError(
+          error.message || "Something went wrong with Google Sign Up."
+        );
+        setSubmitting(null);
+      }
+    } catch (err) {
+      console.error("Google OAuth exception:", err);
+      setError("Something went wrong with Google Sign Up.");
       setSubmitting(null);
     }
-    // On success the browser is navigating away — leave the spinner on.
   };
 
   // Handle Standard Email/Password Sign Up
